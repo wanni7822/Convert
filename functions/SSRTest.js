@@ -12,10 +12,12 @@ exports.handler = function (event, context, callback) {
 
   const url = queryStringParameters['sub'];
 
-  const remove = queryStringParameters['remove']; //正则
-  const filter = queryStringParameters['filter']; //正则
+  const exclude = queryStringParameters['exclude']; //正则
+  const include = queryStringParameters['include']; //正则
   const preview = queryStringParameters['preview']; //yes则预览,不传不预览
   const flag = queryStringParameters['flag']; //是否添加国旗,不传不处理,left:前面加国旗,right:后面加国旗,remove:移除国旗(如果有)
+  const rename = queryStringParameters['rename']; //重命名,格式为 rename=oldname@newname，多个rename可用+连接,如果想移除某字符,则可以oldname@的方式进行
+  const addin = queryStringParameters['addin']; //追加文字,格式为addWord@或@addWord,分别表示在最前面/最后面进行追加文字(如果同国旗一起使用,国旗始终是在最前面的)
 
   if (!isUrl(url)) {
     return callback(null, {
@@ -52,24 +54,46 @@ exports.handler = function (event, context, callback) {
       //#region 协议具体内容获取
       const ssrInfos = new Array();
       const ssrLinks = new Array();
-      for (var linkIndex = 0; linkIndex < filteredLinks.length; linkIndex++) {
-        var link = filteredLinks[linkIndex];
+      filteredLinks.forEach(link => {
         var result = ssr.analyseSSR(link);
-        if (result == null) continue;
+        if (result == null) return true;
         //#region 协议根据名称进行过滤
 
-        if (filter && filter != "" && !new RegExp(filter).test(result.remarks)) continue;
-        if (remove && remove != "" && new RegExp(remove).test(result.remarks)) continue;
+        if (include && include != "" && !new RegExp(include).test(result.remarks)) {
+          return true;
+        }
+        if (exclude && exclude != "" && new RegExp(exclude).test(result.remarks)) {
+          return true;
+        }
+        if (addin && addin.indexOf('@') > 0) {
+          if (addin.startsWith('@')) {
+            result.remarks += addin.substring(1, addin.length);
+          } else if (addin.endsWith('@')) {
+            result.remarks = addin.substring(0, addin.length - 1) + result.remarks;
+          }
+        }
         if (flag) {
           result.remarks = emoji.flagProcess(result.remarks, flag);
         }
-        ssrLinks.push(link);
+        if (rename && rename.indexOf('@') >= 0) {
+          rename.split('+').forEach(nameStr => {
+            var nameInfo = nameStr.split("@");
+            if (nameStr.startsWith("@")) {
+              //do nothing
+            } else if (nameStr.endsWith("@")) {
+              result.remarks = result.remarks.replace(nameInfo[0], "");
+            } else {
+              result.remarks = result.remarks.replace(nameInfo[0], nameInfo[1]);
+            }
+          })
+        }
         ssrLinks.push(ssr.getSsrShareLink(result));
-        ssrLinks.push('----------------------');
+
 
         //#endregion
+
         ssrInfos.push(result);
-      };
+      });
       if (ssrInfos.length == 0) {
         return callback(null, {
           headers: {
@@ -88,8 +112,8 @@ exports.handler = function (event, context, callback) {
           },
           statusCode: 200,
           body: JSON.stringify({
-            ssrLinks,
-            ssrInfos
+            ssrInfos,
+            ssrLinks
           })
         });
       } else {
