@@ -4,6 +4,7 @@ const btoa = require('btoa');
 const isUrl = require('is-url');
 const vmess = require('./addin/ssr');
 const emoji = require('./addin/emoji');
+const line = 0;
 
 exports.handler = function (event, context, callback) {
   const {
@@ -31,14 +32,17 @@ exports.handler = function (event, context, callback) {
 
   fly.get(url).then(response => {
     try {
+      line = 1;
       const bodyDecoded = atob(response.data);
       const links = bodyDecoded.split('\n');
+      line = 2;
       //#region 支持协议过滤
       const filteredLinks = links.filter(link => {
         // Only support vmess now
         if (link.startsWith('vmess://')) return true;
         return false;
       });
+      line = 3;
       if (filteredLinks.length == 0) {
         return callback(null, {
           headers: {
@@ -51,19 +55,24 @@ exports.handler = function (event, context, callback) {
       //#endregion
 
       //#region 协议具体内容获取
+      line = 4;
       const vmessInfos = new Array();
       const vmessLinks = new Array();
       filteredLinks.forEach(link => {
+        line=5;
         var result = vmess.analyse(link);
+        line=6;
         if (result == null) return true;
         //#region 协议根据名称进行过滤
 
         if (include && include != "" && !new RegExp(include).test(result.ps)) {
           return true;
         }
+        line=7;
         if (exclude && exclude != "" && new RegExp(exclude).test(result.ps)) {
           return true;
         }
+        line=8;
         if (addin && addin.indexOf('@') > 0) {
           if (addin.startsWith('@')) {
             result.ps += addin.substring(1, addin.length);
@@ -74,9 +83,11 @@ exports.handler = function (event, context, callback) {
             result.ps = addInfo[0] + result.ps + addInfo[1];
           }
         }
+        line=9;
         if (flag) {
           result.ps = emoji.flagProcess(result.ps, flag);
         }
+        line=10;
         if (rename && rename.indexOf('@') >= 0) {
           rename.split('+').forEach(nameStr => {
             var nameInfo = nameStr.split("@");
@@ -89,12 +100,13 @@ exports.handler = function (event, context, callback) {
             }
           })
         }
-
+        line=11;
         vmessLinks.push(vmess.getVmessShareLink(result));
 
         //#endregion
-
+        line=12;
         vmessInfos.push(result);
+        line=13;
       });
       if (vmessInfos.length == 0) {
         return callback(null, {
@@ -134,7 +146,7 @@ exports.handler = function (event, context, callback) {
           "Content-Type": "text/plain; charset=utf-8"
         },
         statusCode: 500,
-        body: "Runtime Error.\n" + JSON.stringify(e)
+        body: "Runtime Error.\n" + JSON.stringify(e) + "\n" + line
       });
     }
   }).catch(error => {
