@@ -55,7 +55,7 @@ exports.handler = function (event, context, callback) {
       const ssrInfos = new Array();
       const ssrLinks = new Array();
       filteredLinks.forEach(link => {
-        var result = ssr.analyseSSR(link);
+        var result = ssr.analyse(link);
         if (result == null) return true;
         //#region 协议根据名称进行过滤
 

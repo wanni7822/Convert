@@ -6,6 +6,8 @@ let analyseSSR = ssrLink => {
     return ssProcess(ssrLink);
   } else if (ssrLink.startsWith('ssr://')) {
     return ssrProcess(ssrLink);
+  } else if (ssrLink.startsWith('vmess://')) {
+    return vmessProcess(ssrLink);
   } else {
     return null;
   }
@@ -117,6 +119,24 @@ let ssProcess = ssLink => {
     remarks
   }
 }
+let vmessProcess = vmessLink => {
+  const encodedStr = vmessLink.startsWith('vmess://') ? ssrLink.replace(/vmess:\/\//, "") : ssrLink;
+  const decodedStr = URLSafeBase64.decode(encodedStr).toString();
+  let json = JSON.parse(decodedStr);
+  return {
+    v: json.v,
+    host: json.host,
+    ps: decodeURIComponent(escape(json.ps)),
+    add: json.add,
+    port: json.port,
+    id: json.id,
+    aid: json.aid,
+    net: json.net,
+    type: json.type,
+    path: json.path,
+    tls: json.tls
+  }
+}
 
 let getSsrShareLink = ssrEntity => {
   let ssrLink = "ssr://";
@@ -144,15 +164,22 @@ let getSsrShareLink = ssrEntity => {
   return `${ssrLink}${urlSafeBase64Encode(decodedStr)}`;
 }
 
-let urlSafeBase64Encode=ssr=>{
-if (!ssr) return ssr;
-let base64=btoa(ssr);
-return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
+let getVmessShareLink = vmessEntity => {
+  vmessEntity.ps = unescape(encodeURIComponent(vmessEntity.ps));
+  return `vmess://${urlSafeBase64Encode(JSON.stringify(vmessEntity))}`;
+}
+
+let urlSafeBase64Encode = ssr => {
+  if (!ssr) return ssr;
+  let base64 = btoa(ssr);
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
 }
 
 module.exports = {
-  analyseSSR,
+  analyse,
   ssrProcess,
+  getSsrShareLink,
   ssProcess,
-  getSsrShareLink
+  vmessProcess,
+  getVmessShareLink
 }

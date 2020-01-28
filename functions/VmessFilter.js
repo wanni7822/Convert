@@ -2,7 +2,7 @@ const fly = require("flyio");
 const atob = require('atob');
 const btoa = require('btoa');
 const isUrl = require('is-url');
-const ssr = require('./addin/ssr');
+const vmess = require('./addin/ssr');
 const emoji = require('./addin/emoji');
 
 exports.handler = function (event, context, callback) {
@@ -35,9 +35,8 @@ exports.handler = function (event, context, callback) {
       const links = bodyDecoded.split('\n');
       //#region 支持协议过滤
       const filteredLinks = links.filter(link => {
-        // Only support ssr now
-        if (link.startsWith('ss://')) return true;
-        if (link.startsWith('ssr://')) return true;
+        // Only support vmess now
+        if (link.startsWith('vmess://')) return true;
         return false;
       });
       if (filteredLinks.length == 0) {
@@ -52,31 +51,31 @@ exports.handler = function (event, context, callback) {
       //#endregion
 
       //#region 协议具体内容获取
-      const ssrInfos = new Array();
-      const ssrLinks = new Array();
+      const vmessInfos = new Array();
+      const vmessLinks = new Array();
       filteredLinks.forEach(link => {
-        var result = ssr.analyse(link);
+        var result = vmess.analyse(link);
         if (result == null) return true;
         //#region 协议根据名称进行过滤
 
-        if (include && include != "" && !new RegExp(include).test(result.remarks)) {
+        if (include && include != "" && !new RegExp(include).test(result.ps)) {
           return true;
         }
-        if (exclude && exclude != "" && new RegExp(exclude).test(result.remarks)) {
+        if (exclude && exclude != "" && new RegExp(exclude).test(result.ps)) {
           return true;
         }
         if (addin && addin.indexOf('@') > 0) {
           if (addin.startsWith('@')) {
-            result.remarks += addin.substring(1, addin.length);
+            result.ps += addin.substring(1, addin.length);
           } else if (addin.endsWith('@')) {
-            result.remarks = addin.substring(0, addin.length - 1) + result.remarks;
+            result.ps = addin.substring(0, addin.length - 1) + result.ps;
           } else {
             var addInfo = addin.split('@');
-            result.remarks = addInfo[0] + result.remarks + addInfo[1];
+            result.ps = addInfo[0] + result.ps + addInfo[1];
           }
         }
         if (flag) {
-          result.remarks = emoji.flagProcess(result.remarks, flag);
+          result.ps = emoji.flagProcess(result.ps, flag);
         }
         if (rename && rename.indexOf('@') >= 0) {
           rename.split('+').forEach(nameStr => {
@@ -84,20 +83,20 @@ exports.handler = function (event, context, callback) {
             if (nameStr.startsWith("@")) {
               //do nothing
             } else if (nameStr.endsWith("@")) {
-              result.remarks = result.remarks.replace(nameInfo[0], "");
+              result.ps = result.ps.replace(nameInfo[0], "");
             } else {
-              result.remarks = result.remarks.replace(nameInfo[0], nameInfo[1]);
+              result.ps = result.ps.replace(nameInfo[0], nameInfo[1]);
             }
           })
         }
 
-        ssrLinks.push(ssr.getSsrShareLink(result));
+        vmessLinks.push(vmess.getVmessShareLink(result));
 
         //#endregion
 
-        ssrInfos.push(result);
+        vmessInfos.push(result);
       });
-      if (ssrInfos.length == 0) {
+      if (vmessInfos.length == 0) {
         return callback(null, {
           headers: {
             "Content-Type": "text/plain; charset=utf-8"
@@ -115,8 +114,8 @@ exports.handler = function (event, context, callback) {
           },
           statusCode: 200,
           body: JSON.stringify({
-            ssrInfos,
-            ssrLinks
+            vmessInfos,
+            vmessLinks
           })
         });
       } else {
@@ -125,7 +124,7 @@ exports.handler = function (event, context, callback) {
             "Content-Type": "text/plain; charset=utf-8"
           },
           statusCode: 200,
-          body: btoa(ssrLinks.join('\n'))
+          body: btoa(vmessLinks.join('\n'))
         });
       }
       //#endregion
