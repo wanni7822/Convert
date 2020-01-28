@@ -72,7 +72,7 @@ exports.handler = function (event, context, callback) {
             result.remarks = addin.substring(0, addin.length - 1) + result.remarks;
           } else {
             var addInfo = addin.split('@');
-            result.remarks = addInfo[0] + result.remarks.addInfo[1];
+            result.remarks = addInfo[0] + result.remarks + addInfo[1];
           }
         }
         if (flag) {
@@ -90,8 +90,8 @@ exports.handler = function (event, context, callback) {
             }
           })
         }
-        ssrLinks.push(ssr.getSsrShareLink(result));
 
+        ssrLinks.push(ssr.getSsrShareLink(result));
 
         //#endregion
 
