@@ -1,6 +1,6 @@
 const URLSafeBase64 = require('urlsafe-base64');
 const btoa = require('btoa');
-let analyseSSR = ssrLink => {
+let analyse = ssrLink => {
   if (!ssrLink) return null;
   if (ssrLink.startsWith('ss://')) {
     return ssProcess(ssrLink);
