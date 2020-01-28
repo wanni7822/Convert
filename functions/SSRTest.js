@@ -17,7 +17,7 @@ exports.handler = function (event, context, callback) {
   const preview = queryStringParameters['preview']; //yes则预览,不传不预览
   const flag = queryStringParameters['flag']; //是否添加国旗,不传不处理,left:前面加国旗,right:后面加国旗,remove:移除国旗(如果有)
   const rename = queryStringParameters['rename']; //重命名,格式为 rename=oldname@newname，多个rename可用+连接,如果想移除某字符,则可以oldname@的方式进行
-  const addin = queryStringParameters['addin']; //追加文字,格式为addWord@或@addWord,分别表示在最前面/最后面进行追加文字(如果同国旗一起使用,国旗始终是在最前面的)
+  const addin = queryStringParameters['addin']; //追加文字,格式为addWord@或@addWord或者addWord@addWord,分别表示在最前面/最后面/前后都 进行追加文字(如果同国旗一起使用,国旗始终是在最前面的)
 
   if (!isUrl(url)) {
     return callback(null, {
@@ -70,6 +70,9 @@ exports.handler = function (event, context, callback) {
             result.remarks += addin.substring(1, addin.length);
           } else if (addin.endsWith('@')) {
             result.remarks = addin.substring(0, addin.length - 1) + result.remarks;
+          } else {
+            var addInfo = addin.split('@');
+            result.remarks = addInfo[0] + result.remarks.addInfo[1];
           }
         }
         if (flag) {
