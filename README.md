@@ -23,9 +23,13 @@
 |                |                 | addin |追加名称|
 |                |                 | flag |追加名称|
 
+
 ['preview']; //yes则预览,不传不预览
+
 ['flag']; //是否添加国旗,不传不处理,left:前面加国旗,right:后面加国旗,remove:移除国旗(如果有)
+
 ['rename']; //重命名,格式为 rename=oldname@newname，多个rename可用+连接,如果想移除某字符,则可以oldname@的方式进行
+
 ['addin']; //追加文字,格式为addWord@或@addWord或者addWord@addWord,分别表示在最前面/最后面/前后都 进行追加文字(如果同国旗一起使用,国旗始终是在最前面的)
 
 
