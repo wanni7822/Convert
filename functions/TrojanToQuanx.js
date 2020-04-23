@@ -63,6 +63,26 @@ exports.handler = function (event, context, callback) {
         statusCode: 200,
         body: btoa(trojanLinks.join("\n")),
       });
-    } catch (e) {}
+    } catch (error) {
+        if (error && !isNaN(error.status)) {
+            return callback(null, {
+              headers: {
+                "Content-Type": "text/plain; charset=utf-8"
+              },
+              statusCode: 400,
+              body: "订阅地址网站出现了一个 " + String(error.status) + " 错误。"
+            });
+          }
+      
+          // Unknown
+          return callback(null, {
+            headers: {
+              "Content-Type": "text/plain; charset=utf-8"
+            },
+            statusCode: 500,
+            body: "Unexpected Error.\n" + JSON.stringify(error)
+          });
+        })
+    }
   });
 };
