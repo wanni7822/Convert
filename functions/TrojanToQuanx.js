@@ -45,7 +45,7 @@ exports.handler = function (event, context, callback) {
         var address = uri.split(":")[0];
         var port = uri.split(":")[1];
         let resultUrl = `trojan = ${uri}, password = ${pwd}, over-tls=true, tls-host=${address}, tag=${name}`;
-        trojanLinks.push(requestUrl);
+        trojanLinks.push(resultUrl);
       });
       if (trojanLinks.length == 0) {
         return callback(null, {
