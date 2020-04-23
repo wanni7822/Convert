@@ -22,15 +22,21 @@
 |                |                 | rename | 重命名 |
 |                |                 | addin |追加名称|
 |                |                 | flag |追加名称|
+| TrojanToQuanx | cao大订阅专用 | sub |订阅地址|
+
+> 关于TrojanToQuanx
+>
+> 此处提供一个可以直接使用的链接,后面直接跟上cao大trojan的订阅地址就好了,就那个mu=6的
+>
+> https://dotunnel.netlify.app/api/TrojanToQuanx?sub=
+>
+> 如果您对此地址不信任,可以拉到文档最下面,有个自部署,可以把本git中的内容部署到netlify中,内容开源,放心食用
+
 
 
 ['preview']; //yes则预览,不传不预览
 
 ['flag']; //是否添加国旗,不传不处理,left:前面加国旗,right:后面加国旗,remove:移除国旗(如果有)
-
-['rename']; //重命名,格式为 rename=oldname@newname，多个rename可用+连接,如果想移除某字符,则可以oldname@的方式进行
-
-['addin']; //追加文字,格式为addWord@或@addWord或者addWord@addWord,分别表示在最前面/最后面/前后都 进行追加文字(如果同国旗一起使用,国旗始终是在最前面的)
 
 
 ```
@@ -48,7 +54,7 @@ addin说明:
 
 例如
 
-test.netlify.com/api/vmessfilter?preview=yes&filter=香港&sub=你的订阅地址
+dotunnel.netlify.com/api/vmessfilter?preview=yes&filter=香港&sub=你的订阅地址
 
 此处的香港没有urlencode,知晓一下
 
