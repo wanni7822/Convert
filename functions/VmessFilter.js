@@ -146,7 +146,7 @@ exports.handler = function (event, context, callback) {
           "Content-Type": "text/plain; charset=utf-8"
         },
         statusCode: 500,
-        body: "Runtime Error.\n" + JSON.stringify(e) + "\n" + line
+        body: "Runtime Error.\n" + JSON.stringify(e) + "\n" + line + "\n" +  JSON.stringify(response)
       });
     }
   }).catch(error => {
