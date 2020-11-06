@@ -136,7 +136,7 @@ exports.handler = function (event, context, callback) {
             "Content-Type": "text/plain; charset=utf-8"
           },
           statusCode: 200,
-          body: btoa(vmessLinks.join('\n'))
+          body: vmessLinks.join('\n')
         });
       }
       //#endregion
