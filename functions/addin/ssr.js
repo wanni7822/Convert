@@ -120,7 +120,7 @@ let ssProcess = ssLink => {
   }
 }
 let vmessProcess = vmessLink => {
-  const encodedStr = vmessLink.startsWith('vmess://') ? ssrLink.replace(/vmess:\/\//, "") : ssrLink;
+  const encodedStr = vmessLink.startsWith('vmess://') ? vmessLink.replace(/vmess:\/\//, "") : vmessLink;
   const decodedStr = URLSafeBase64.decode(encodedStr).toString();
   let json = JSON.parse(decodedStr);
   return {
