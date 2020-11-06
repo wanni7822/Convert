@@ -1,4 +1,5 @@
 const URLSafeBase64 = require('urlsafe-base64');
+const atob = require('atob');
 const btoa = require('btoa');
 let analyse = ssrLink => {
   if (!ssrLink) return null;
@@ -121,7 +122,7 @@ let ssProcess = ssLink => {
 }
 let vmessProcess = vmessLink => {
   const encodedStr = vmessLink.startsWith('vmess://') ? vmessLink.replace(/vmess:\/\//, "") : vmessLink;
-  const decodedStr = URLSafeBase64.decode(encodedStr).toString();
+  const decodedStr = atob(encodedStr);
   let json = JSON.parse(decodedStr);
   return {
     v: json.v,
