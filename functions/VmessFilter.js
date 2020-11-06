@@ -111,7 +111,7 @@ exports.handler = function (event, context, callback) {
         } else {
           let address = result.add + ( ( result.port && result.port.length >　0) ? (':' + result.port) : '');
           let llink = 'vmess = ' + address + ', method=' + result.type + ', password=' + result.id + ', obfs=' + result.net + ', obfs-host=' + result.host + ', obfs-uri=' + result.path + ', fast-open=false, udp-relay=false'
-              + ', tag=' + unescape(encodeURIComponent(result.ps));
+              + ', tag=' + result.ps;
           vmessLinks.push(llink);
         }
 
