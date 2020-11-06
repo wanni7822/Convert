@@ -38,7 +38,7 @@ exports.handler = function (event, context, callback) {
       filteredLinks.forEach((link) => {
         //trojan://065a8279-c58a-3bb1-8e68-313351be866d@trojan9.dotunnel.monster:443?allowinsecure=1&allowInsecure=1&tfo=1#trojan测试节点9
         var pureLink = link.replace("trojan://", "");
-        var name = pureLink.split("#")[1];
+        var name = decodeURI(pureLink.split("#")[1]);
         var config = pureLink.split("#")[0];
         var pwd = config.split("@")[0];
         var params = config.split("?")[1];
