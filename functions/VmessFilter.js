@@ -4,7 +4,7 @@ const btoa = require('btoa');
 const isUrl = require('is-url');
 const vmess = require('./addin/ssr');
 const emoji = require('./addin/emoji');
-const line = 0;
+var line = 0;
 
 exports.handler = function (event, context, callback) {
   const {
