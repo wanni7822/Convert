@@ -62,7 +62,8 @@ exports.handler = function (event, context, callback) {
           "Content-Type": "text/plain; charset=utf-8",
         },
         statusCode: 200,
-        body: btoa(trojanLinks.join("\n")),
+        // body: btoa(trojanLinks.join("\n")),
+        body: trojanLinks
       });
     } catch (error) {
       if (error && !isNaN(error.status)) {
