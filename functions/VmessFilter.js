@@ -13,6 +13,7 @@ exports.handler = function (event, context, callback) {
 
   const url = queryStringParameters['sub'];
 
+  const plain = queryStringParameters['plain']; //不加密
   const exclude = queryStringParameters['exclude']; //正则
   const include = queryStringParameters['include']; //正则
   const preview = queryStringParameters['preview']; //yes则预览,不传不预览
@@ -101,11 +102,18 @@ exports.handler = function (event, context, callback) {
           })
         }
         line=11;
-        vmessLinks.push(vmess.getVmessShareLink(result));
+        if (!plain) {
+          vmessLinks.push(vmess.getVmessShareLink(result));
 
-        //#endregion
-        line=12;
-        vmessInfos.push(result);
+          //#endregion
+          line = 12;
+          vmessInfos.push(result);
+        } else {
+          let llink = 'vmess = ' + result.add + ':' + result.port + ', method=' + result. + ', password=' + result.id + ', obfs=' + result.net + ', obfs-host=' + result.host + ', obfs-uri=' + result.path + ', fast-open=false, udp-relay=false'
+              + ', tag=' + unescape(encodeURIComponent(result.ps));
+          vmessLinks.push(llink);
+        }
+
         line=13;
       });
       if (vmessInfos.length == 0) {
