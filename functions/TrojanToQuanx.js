@@ -63,7 +63,7 @@ exports.handler = function (event, context, callback) {
         },
         statusCode: 200,
         // body: btoa(trojanLinks.join("\n")),
-        body: trojanLinks
+        body: JSON.stringify(trojanLinks)
       });
     } catch (error) {
       if (error && !isNaN(error.status)) {
