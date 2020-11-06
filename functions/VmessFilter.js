@@ -117,7 +117,7 @@ exports.handler = function (event, context, callback) {
 
         line=13;
       });
-      if (vmessInfos.length == 0) {
+      if (vmessLinks.length == 0) {
         return callback(null, {
           headers: {
             "Content-Type": "text/plain; charset=utf-8"
