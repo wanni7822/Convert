@@ -32,17 +32,16 @@ line = 1;
     let proxyGroups = doc['proxy-groups'];  
     
     for(let i = 0; i < proxyGroups.length; i++){
-      let list = new Array;
       if(proxyGroups[i].name.includes("自动选择")){
+        let list = new Array;
         for(let j = 0; j < proxyGroups[i].proxies.length; j++){
           if(!(proxyGroups[i].proxies[j].includes("解锁节点")) && !(proxyGroups[i].proxies[j].includes("公益代理，收费请举报并反馈"))){
             list.push( proxyGroups[i].proxies[j]);
           }
         }
+        proxyGroups[i].proxies = list;
       }
-      proxyGroups[i].proxies = list;
-    }
-		
+    }		
 
 		// DEBUG
 		return callback(null, {
