@@ -93,7 +93,7 @@ line = 1;
 					"Content-Type": "text/plain; charset=utf-8"
 				},
 				statusCode: 400,
-		    	body: "订阅地址网站出现了一个 " + String(error.status) + " 错误: line = " + line + "\n" + JSON.stringify(error)
+		    	body: "订阅地址网站出现了一个 " + String(error.status) + " 错误: line = " + line + "\n" + "url:" + url + "\n" + JSON.stringify(error)
 			});
 		}
 
@@ -103,7 +103,7 @@ line = 1;
 				"Content-Type": "text/plain; charset=utf-8"
 			},
 			statusCode: 500,
-	    	body: "Unexpected Error.line = " + line + "\n" + JSON.stringify(error)
+	    	body: "Unexpected Error.line = " + line + "\n" + "url:" + url + "\n" + JSON.stringify(error)
 		});
 	})
     
