@@ -22,7 +22,9 @@ exports.handler = function(event, context, callback) {
 		});
 	}
 line = 1;
-	fly.get(url).then(response => {
+	fly.get(url,null,{
+    timeout:50000 //超时设置为5s
+}).then(response => {
     line =2;
     var doc = yaml.load(response.data);
     line =3;    
@@ -32,7 +34,7 @@ line = 1;
 				"Content-Type": "text/plain; charset=utf-8"
 			},	
 			statusCode: 200,
-			body: JSON.stringify(doc.proxy-groups[2])
+			body: JSON.stringify(doc['proxy-groups'][2])
 		});
     
     
