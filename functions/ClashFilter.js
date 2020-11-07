@@ -29,55 +29,20 @@ line = 1;
     var doc = yaml.load(response.data);
     line =3;    
     // DEBUG
-		return callback(null, {
-			headers: {
-				"Content-Type": "text/plain; charset=utf-8"
-			},	
-			statusCode: 200,
-			body: JSON.stringify(doc['proxy-groups'][2])
-		});
+    let proxyGroups = doc['proxy-groups'];  
     
-    
-    
-		const bodyDecoded = atob(response.data);
-		const links = bodyDecoded.split('\n');
-		const filteredLinks = links.filter(link => {
-			// Only support ss & ssr now
-			if (link.startsWith('ss://')) return true;
-			if (link.startsWith('ssr://')) return true;
-			return false;
-		});
-
-		if (filteredLinks.length == 0) {
-			return callback(null, {
-				headers: {
-					"Content-Type": "text/plain; charset=utf-8"
-				},
-				statusCode: 400,
-				body: "订阅地址中没有节点信息。"
-			});
-		}
-		const processedLinks = new Array();
-		filteredLinks.forEach(link => {
-			// 将订阅链接包装为对象
-			if (link.startsWith('ss://')) {
-
-			}
-
-			// 过滤非 origin、plain 的 SSR 节点（Clash 暂时只支持 SS）
-
-			// DEBUG
-			processedLinks.push(link);
-		})
-
-		if (processedLinks.length == 0) {
-			return callback(null, {
-				statusCode: 400,
-				body: "订阅地址中没有节点信息。"
-			});
-		}
-
-
+    for(let i = 0; i < proxyGroups.length; i++){
+      let list = new Array;
+      if(proxyGroups[i].name.includes("自动选择")){
+        for(let j = 0, j < proxyGroups[i].proxies.length; j++){
+          if(!(proxyGroups[i].proxies.includes("解锁节点")) && !(proxyGroups[i].proxies.includes("公益代理，收费请举报并反馈"))){
+            list.push( proxyGroups[i].proxies[j]);
+          }
+        }
+      }
+      proxyGroups[i].proxies = list;
+    }
+		
 
 		// DEBUG
 		return callback(null, {
@@ -85,7 +50,7 @@ line = 1;
 				"Content-Type": "text/plain; charset=utf-8"
 			},	
 			statusCode: 200,
-			body: JSON.stringify(processedLinks)
+			body: JSON.stringify(doc)
 		});
 	}).catch(error => {
 		// 404
