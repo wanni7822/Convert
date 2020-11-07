@@ -5,6 +5,8 @@ const isUrl = require('is-url');
 const yaml = require('js-yaml');
 const fs   = require('fs');
 
+var line = 0;
+
 exports.handler = function(event, context, callback) {
 	const { queryStringParameters } = event;
 
@@ -19,11 +21,11 @@ exports.handler = function(event, context, callback) {
 		    body: "参数 src 无效，请检查是否提供了正确的节点订阅地址。"
 		});
 	}
-
+line = 1;
 	fly.get(url).then(response => {
+    line =2;
     var doc = yaml.load(response.data);
-    console.log(doc.proxy-groups[2]);
-    
+    line =3;    
     // DEBUG
 		return callback(null, {
 			headers: {
@@ -91,7 +93,7 @@ exports.handler = function(event, context, callback) {
 					"Content-Type": "text/plain; charset=utf-8"
 				},
 				statusCode: 400,
-		    	body: "订阅地址网站出现了一个 " + String(error.status) + " 错误。"
+		    	body: "订阅地址网站出现了一个 " + String(error.status) + " 错误: line = " + line + "\n" + JSON.stringify(error)
 			});
 		}
 
@@ -101,7 +103,7 @@ exports.handler = function(event, context, callback) {
 				"Content-Type": "text/plain; charset=utf-8"
 			},
 			statusCode: 500,
-	    	body: "Unexpected Error.\n" + JSON.stringify(error)
+	    	body: "Unexpected Error.line = " + line + "\n" + JSON.stringify(error)
 		});
 	})
     
