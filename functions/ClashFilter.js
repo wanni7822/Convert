@@ -34,8 +34,8 @@ line = 1;
     for(let i = 0; i < proxyGroups.length; i++){
       let list = new Array;
       if(proxyGroups[i].name.includes("自动选择")){
-        for(let j = 0, j < proxyGroups[i].proxies.length; j++){
-          if(!(proxyGroups[i].proxies.includes("解锁节点")) && !(proxyGroups[i].proxies.includes("公益代理，收费请举报并反馈"))){
+        for(let j = 0; j < proxyGroups[i].proxies.length; j++){
+          if(!(proxyGroups[i].proxies[j].includes("解锁节点")) && !(proxyGroups[i].proxies[j].includes("公益代理，收费请举报并反馈"))){
             list.push( proxyGroups[i].proxies[j]);
           }
         }
