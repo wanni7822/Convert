@@ -10,7 +10,7 @@ var line = 0;
 exports.handler = function(event, context, callback) {
 	const { queryStringParameters } = event;
 
-	const url = queryStringParameters['src'];
+	const url = decodeURIComponent(queryStringParameters['src']);
 
 	if (!isUrl(url)) {
 		return callback(null, {
