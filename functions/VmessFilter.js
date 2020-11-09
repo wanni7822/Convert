@@ -111,7 +111,8 @@ exports.handler = function (event, context, callback) {
         } else {
           let address = result.add + ( ( result.port && result.port.length >　0) ? (':' + result.port) : '');
           let llink = 'vmess = ' + address 
-              + ', method=' + result.type 
+             // + ', method=' + result.type 
+              + ', method=auto'
               + ', password=' + result.id 
               + ', obfs=' + result.net 
               + ((result.host) == undefined? '' : (', obfs-host=' + result.host)) 
