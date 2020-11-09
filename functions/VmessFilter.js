@@ -110,7 +110,13 @@ exports.handler = function (event, context, callback) {
           vmessInfos.push(result);
         } else {
           let address = result.add + ( ( result.port && result.port.length >　0) ? (':' + result.port) : '');
-          let llink = 'vmess = ' + address + ', method=' + result.type + ', password=' + result.id + ', obfs=' + result.net + ', obfs-host=' + (result.host) == undefined? '' : result.host + ', obfs-uri=' + (result.path) == undefined? '' : result.path + ', fast-open=false, udp-relay=false'
+          let llink = 'vmess = ' + address 
+              + ', method=' + result.type 
+              + ', password=' + result.id 
+              + ', obfs=' + result.net 
+              + ', obfs-host=' + ((result.host) == undefined? '' : result.host) 
+              + ', obfs-uri=' + ((result.path) == undefined? '' : result.path)
+              + ', fast-open=false, udp-relay=false'
               + ', tag=' + result.ps;
           vmessLinks.push(llink);
         }
