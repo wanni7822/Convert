@@ -117,7 +117,8 @@ exports.handler = function (event, context, callback) {
               + ', obfs-host=' + ((result.host) == undefined? '' : result.host) 
               + ', obfs-uri=' + ((result.path) == undefined? '' : result.path)
               + ', fast-open=false, udp-relay=false'
-              + ', tag=' + result.ps;
+             // + ', tag=' + result.ps;
+              + ', tag=' + ('节点' + vmessLinks.length);
           vmessLinks.push(llink);
         }
 
