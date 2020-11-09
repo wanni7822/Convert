@@ -118,11 +118,13 @@ exports.handler = function (event, context, callback) {
               + ((result.host) == undefined? '' : (', obfs-host=' + result.host)) 
               + ((result.path) == undefined? '' : (', obfs-uri=' + result.path))
               + ', fast-open=false, udp-relay=false'
-             // + ', tag=' + result.ps;
-              + ', tag=' + ('节点' + vmessLinks.length);
-          if(result.net != 'tcp') {
-            vmessLinks.push(llink);
-          }
+              + ', tag=' + result.ps;
+             // + ', tag=' + ('节点' + vmessLinks.length);
+          
+              vmessLinks.push(llink);
+//           if(result.net != 'tcp') {
+//             vmessLinks.push(llink);
+//           }
         }
 
         line=13;
