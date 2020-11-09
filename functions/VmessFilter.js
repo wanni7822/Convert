@@ -114,11 +114,11 @@ exports.handler = function (event, context, callback) {
               + ', method=' + result.type 
               + ', password=' + result.id 
               + ', obfs=' + result.net 
-              + ', obfs-host=' + ((result.host) == undefined? '' : result.host) 
-              + ', obfs-uri=' + ((result.path) == undefined? '' : result.path)
+              + ((result.host) == undefined? '' : (', obfs-host=' + result.host)) 
+              + ((result.path) == undefined? '' : (', obfs-uri=' + result.path))
               + ', fast-open=false, udp-relay=false'
-             // + ', tag=' + result.ps;
-              + ', tag=' + ('节点' + vmessLinks.length);
+              + ', tag=' + result.ps;
+             // + ', tag=' + ('节点' + vmessLinks.length);
           vmessLinks.push(llink);
         }
 
